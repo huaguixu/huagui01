@@ -1,0 +1,25 @@
+//模板
+#include<iostream>
+using namespace std;
+template<typename T>//T可以用各种数据类型代替,作为相同函数体的模板
+//类型参数化
+void test01( T&a,T&b) {
+	T temp;
+	temp = a;
+	a = b;
+	b = temp;
+}
+int main() {
+	string a;
+	string b;
+	cin >> a;
+	cin >> b;
+	//1.自动类型推导
+	//test01(a,b);//此时调用，T换成int
+	//2.显示指定类型
+	test01<string>(a, b);
+	cout << a << endl;
+	cout << b << endl;
+	system("pause");
+	return 0;
+}

@@ -1,0 +1,120 @@
+//文件
+//文本文件
+//写文件
+#include<iostream>
+#include<fstream>//文件流头文件
+using namespace std;
+void test01() {
+	ofstream ofs;
+	ofs.open("test.txt",ios::out);//自动创建到程序的同级目录内
+	ofs << "张三" <<endl;//写信息
+	ofs << "男" << endl;
+	ofs << "18" << endl;
+}
+int main() {
+	test01();
+	system("pause");
+	return 0;
+}
+
+//文件
+//文本文件
+//读文件
+#include<string>
+#include<iostream>
+#include<fstream>//文件流头文件
+using namespace std;
+void test01() {
+	ifstream ifs;
+	ifs.open("test.txt",ios::in);//自动创建到程序的同级目录内（const char *,打开方式）
+	//判断是否成功打开文件
+	if (!ifs.is_open()){
+		cout << "文件打开失败" <<endl;
+		return;
+	}
+	//读文件
+	//1
+	/*char buf[1024] = { 0 };
+	while (ifs >> buf) {
+		cout << buf <<endl;
+	}
+	ifs.close();*/
+	//2
+	/*char buf[1024] = { 0 };
+	while (ifs.getline(buf,sizeof(buf)))
+	{
+		cout << buf <<endl;
+	}*/
+	//3
+	string buf;
+	while (getline(ifs,buf)) {
+		cout << buf <<endl;
+	}
+	//4
+	/*char c;
+	while ((c = ifs.get())!= EOF) {
+		cout << c << endl;
+	}*/
+}
+int main() {
+	test01();
+	system("pause");
+	return 0;
+}
+
+//文件
+//二进制文件
+//写文件
+#include<string>
+#include<iostream>
+#include<fstream>//文件流头文件
+using namespace std;
+class person {
+public:
+	char m_name[64];
+	int m_age;
+};
+void test01() {
+	ofstream ofs;
+	ofs.open("person.txt", ios::out | ios::binary);
+	person p = { "张三",18 };
+	ofs.write((const char*)&p, sizeof(person));//参数 const char*p,int sizeof
+	ofs.close();
+}
+int main() {
+	test01();
+	system("pause");
+	return 0;
+}
+
+//文件
+//二进制文件
+//读文件
+//文件有乱码很正常，可以正常读入
+#include<iostream>
+#include<string>
+#include<fstream>//文件流头文件
+using namespace std;
+class person {
+public:
+	char m_name[64];
+	int m_age;
+};
+void test01() {
+	ifstream ifs;
+	ifs.open("person.txt", ios::in | ios::binary);
+	if (!ifs.is_open()) {
+		cout << "文件打开失败" << endl;
+		return;
+	}
+	person p;
+	ifs.read((char*)&p, sizeof(person));
+	cout << p.m_name << endl;
+	cout << p.m_age << endl;
+	ifs.close();
+}
+int main() {
+	test01();
+	system("pause");
+	return 0;
+}

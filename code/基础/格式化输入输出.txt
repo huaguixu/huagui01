@@ -1,0 +1,77 @@
+#include<stdio.h>
+//printf:%[flags][width][.prec][hlL]type
+//	//    flag              含义
+	//     -               左对齐
+	//     +             在前面加+或-
+	//  (space)            正数留空
+	//     0                0填充
+//	// width或prec          含义
+	//   number          最小字符数
+	//     *         下一个参数是字符数
+	//  .number         小数点后的位数
+	//    .*      下一个参数是小数点后的位数
+//	//    hlL                含义
+	//    hh               单个字节
+	//     h                 short
+	//     l                 long
+	//    ll               long long
+	//     L              long dounle
+//	//   type                 用于
+	//   i或d                 int
+	//    u               unsigned int
+	//    o                  八进制
+	//    x                 十六进制
+	//    X            字母大写的十六进制
+	//    f                   float
+	//   e或E                 指数
+	//    g                   float
+	//    G                   float
+	//   a或A              十六进制浮点
+	//    c                   char
+	//    s                  字符串
+	//    p                   指针
+	//    n              读入/写出的个数
+//scanf_s:%[flag]type
+//  //  flag                  含义
+    //    *                 跳过type类型
+	//  number              最大字符数
+	//    hh                单个字节
+	//     h                 short
+	//     l                 long
+	//    ll               long long
+	//     L              long dounle    
+//	//   type                 用于
+	//   i或d                 int(i可读十六进制和八进制)
+	//    u               unsigned int
+	//    o                  八进制
+	//    x                 十六进制
+	// a e f g               float
+	//    c                   char
+	//    s                  字符串
+	//    p                   指针
+	//    n              读入/写出的个数
+	//   [字符]            所允许的字符
+	//   [^字符]            直到该字符
+
+int main()
+{
+//示例
+	printf("%9d\n", 123);//输出      123(占据9个字符的空间)
+	printf("%-9d\n", 123);//输出123      (9个字符空间左对齐)
+	printf("%-+9d\n", 123);//输出+123      (输出符号且左对齐）
+	printf("%09d\n", 123);//输出000000123(在字符前填0)
+	printf("%9.2f\n", 123.0);//输出   123.00(共9位，小数点后两位，前7后2)
+	printf("%*d\n", 6, 123);//输出   123(输出共6位，第一个参数6来满足*)
+	printf("%*.*f\n", 9,6,2.0);//输出 2.000000(输出共9位，小数点后6位)
+	printf("%hhd\n", 12345);//输出57
+	int a,num;
+	scanf_s("%d%n\n", &a,&num);
+	printf("%d\n",num);//输出a的位数，输出a的字符数
+	scanf_s("%[^\n]", a);//一直读到换行符
+//scanf_s(),printf()的返回值
+	int a,b,c;
+	c = scanf_s("%i%i", &a, &b);
+	printf("%i\n", c);//传入的变量数
+	c = printf("%d\n", b);
+	printf("%i\n", c);//输出的字符数(包含了结束符)
+}

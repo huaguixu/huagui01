@@ -1,0 +1,62 @@
+//双链表
+#include<stdio.h>
+#include<stdlib.h>
+struct node {
+	int data;
+	node* pre;
+	node* next;
+};
+
+int main() {
+	node s1, * p = &s1, *header = &s1,*tail;
+	s1.pre = NULL;
+	s1.next = NULL;
+	node* s;
+	for (int i = 0; i < 3; i++) {
+		s = (node*)malloc(sizeof(node));
+		scanf_s("%d", &s->data);
+		s->next = NULL;
+		p->next = s;
+		s->pre = p;
+		p = s;
+	}
+	tail = s;
+	for (int i = 0; i < 3; i++) {
+		header = header-> next;
+		printf("%d ", header->data);
+		printf("%d ", tail->data);
+		tail = tail->pre;
+	}
+}
+
+//双循环链表
+#include<stdio.h>
+#include<stdlib.h>
+struct node {
+	int data;
+	node* pre;
+	node* next;
+};
+
+int main() {
+	node s1, * p = &s1, *header = &s1,*tail;
+	scanf_s("%d", &s1.data);
+	s1.pre = NULL;
+	s1.next = NULL;
+	node* s;
+	for (int i = 0; i < 3; i++) {
+		s = (node*)malloc(sizeof(node));
+		scanf_s("%d", &s->data);
+		s->next = NULL;
+		p->next = s;
+		s->pre = p;
+		p = s;
+	}
+	tail = s;
+	s->next = header;
+	header->pre = tail;
+	for (int i = 0; i < 10; i++) {
+		header = header-> next;
+		printf("%d ", header->data);
+	}
+}
