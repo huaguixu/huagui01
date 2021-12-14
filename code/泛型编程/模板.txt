@@ -23,3 +23,156 @@ int main() {
 	system("pause");
 	return 0;
 }
+//类模板
+#include<iostream>
+using namespace std;
+template<class T1,class T2>
+class person {
+public:
+	person(T1 name, T2 age) {
+		m_name = name;
+		m_age = age;
+	}
+	T1 m_name;
+	T2 m_age;
+	void show() {
+		cout << m_name << endl;
+		cout << m_age << endl;
+	}
+};
+//直接指定传入类型
+void print1(person<string, int>&p) {
+	p.show();
+}
+//将参数模板化
+template<class T1, class T2>
+void print2(person<T1,T2>&p) {
+	p.show();
+	cout << typeid(T1).name() << endl;
+	cout << typeid(T2).name() <<endl;
+}
+//将整个类模板化（函数模板配合类模板）
+template<class T>
+void print3(T &p) {
+	p.show();
+	cout << typeid(T).name()<< endl;
+}
+void test01() {
+	person<string, int>p("张三", 18);
+	print1(p);
+	print2(p);
+	print3(p);
+}
+int main() {
+	test01();
+	system("pause");
+	return 0;
+}
+
+//类模板与继承
+#include<iostream>
+using namespace std;
+template<class T>
+class base {
+public:
+	T m;
+	base() {
+		cout << typeid(T).name();
+	}
+};
+class son :public base<int>//要指定数据类型，否则编译器无法分配空间
+{
+
+};
+template<class T1,class T2>
+class son2 :public base<T2>//要想初始化对象，必须指定数据类型
+{
+	T1 obj;
+};
+
+void test01(){
+	son s1;
+	son2<int,char>s2;
+}
+int main() {
+	test01();
+	system("pause");
+	return 0;
+}
+
+//类模板中成员函数的类外实现
+#include<iostream>
+using namespace std;
+template<class T1,class T2>
+class person {
+public:
+	T1 m_name;
+	T2 m_age;
+	person(T1 name, T2 age);
+	void show();
+};
+template<class T1,class T2>//提供模板参数列表
+person<T1,T2>::person(T1 name,T2 age) {//加类模板
+	m_name = name;
+	m_age = age;
+}
+template<class T1, class T2>
+void person<T1, T2>::show() {
+	cout << m_name << endl;
+	cout << m_age << endl;
+}
+void test01(){
+	person<string, int>p("san", 18);
+	p.show();
+}
+int main() {
+	test01();
+	system("pause");
+	return 0;
+}
+
+//类模板与友元
+#include<iostream>
+using namespace std;
+template<class T1,class T2>
+//全局函数类内实现
+class person;//让编译器知道person类的存在
+template<class T1, class T2>//参数化列表
+void print2(person<T1, T2>& p) {//让编译器知道print2的存在
+	cout << p.m_name << endl;
+	cout << p.m_age << endl;
+}
+template<class T1, class T2>
+class person {
+	friend void print(person<T1, T2>&p) {
+		cout << p.m_name << endl;
+		cout << p.m_age << endl;
+	}
+	//加空模板参数列表
+	friend void print2<>(person<T1, T2>& p);
+private:
+	T1 m_name;
+	T2 m_age;
+public:
+	person(T1 name, T2 age);
+	
+};
+template<class T1, class T2>
+void print(person<T1, T2>& p) {
+	cout << p.m_name << endl;
+	cout << p.m_age << endl;
+}
+template<class T1,class T2>//提供模板参数列表
+person<T1,T2>::person(T1 name,T2 age) {//加类模板
+	m_name = name;
+	m_age = age;
+}
+void test01(){
+	person<string, int>p("san", 18);
+	print2(p);
+}
+int main() {
+	test01();
+	system("pause");
+	return 0;
+}
