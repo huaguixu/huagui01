@@ -1,7 +1,6 @@
-//STL六大组件
-//容器，算法，迭代器，仿函数，适配器，空间配置器2
 //vector容器
 //vector容器存放内置数据类型
+//单端数组
 #include<iostream>
 #include<vector>
 #include<algorithm>//对应第三种遍历 加入算法
@@ -136,82 +135,32 @@ int main() {
 	return 0;
 }
 
-//string容器(本质是一个类)
 #include<iostream>
-#include<string>
+#include<vector>
 #include<algorithm>
 using namespace std;
-void test01() {
-//string 构造函数
-	string s1;//默认构造
-	const char* str = " ";
-	string s2(str);
-	cout << s2 << endl;
-	string s3(s2);//拷贝构造
-	cout << s3<< endl;
-	string s4(10, 'a');
-	cout << s4 << endl;
- //赋值操作(等号赋值)
-	string str1 = "hello";
-	string str2;
-	str2 = str1;
-	string str3;
-	str3= 'a';
-//assign赋值
-	string str4;
-	str4.assign("hello");
-	string str5,str6,str7;
-	str5.assign("hello cpp", 5);
-	str6.assign(str5);
-	str7.assign(10, 'w');
-//string的拼接
-	string st = "h";
-	st += "e";
-	string st1 = "l";
-	st += st1;
-	st += 'l';
-	st.append("o");//加入"o"
-	string st2="w";
-	st.append(" abcd", 1);//加入前n个字符
-	st.append(st2);
-	st.append("world", 1, 4);//从第二个字符开始截取，截取4个字符
-	cout << st <<endl;
-//字符串的查找和替换
-//字符串的查找
-	string stri1 = "abcdefgde";
-	int pos = stri1.find("de");
-	cout << pos << endl;//从0开始索引;
-	//如果没找到 返回-1
-	pos = stri1.rfind("de");//从右往左查
-	cout << pos <<endl;
-//字符串的替换
-	stri1.replace(1, 3,"1111");//将1号位到3号位的字符串转换位指定的字符串
-	cout << stri1 << endl;
-//字符串的比较
-	string strin1 = "hello";
-	string strin2 = "hello";
-	if (strin1 == strin2) {//==运算符重载
-		cout << strin1 <<endl;
+//vector容器构造
+void print(vector<int>&v) {
+	for (vector<int>::iterator it = v.begin(); it != v.end(); it++) {
+		cout << *it << endl;
 	}
-	//2.compare函数
-	int p=strin1.compare(strin2);//相等返回0，strin1>strin2返回1,strin1<strin2返回-1;
-	cout << p << endl;
-//字符存取
-	string s_t1 = "hello";
-	cout << s_t1 << endl;
-	//访问单个字符
-	for (int i = 0; i < s_t1.size(); i++) {//s_t1.size()长度；
-		cout << s_t1[i];
-	}
-	cout << endl;
-	for (int i = 0; i < s_t1.size(); i++) {
-		cout << s_t1.at(i);
-	}
-	cout << endl;
-	//修改单个字符
-	s_t1[0] = 'x';
-	cout << s_t1 << endl;
+
 }
+void test01() {
+	vector<int>v1;
+	for (int i = 0; i < 10; i++) {
+		v1.push_back(i);
+	}
+	print(v1);
+	//将v1.begin()到v2.end();之间的数据插入
+	vector<int>v2(v1.begin(), v1.end());
+	print(v2);
+	//插入10个100
+	vector<int>v3(10, 100);
+	print(v3);
+	//拷贝构造
+	vector<int>v4(v3);
+	print(v4);
 }
 int main() {
 	test01();
