@@ -1,0 +1,95 @@
+#include<iostream>
+#include<deque>
+#include<algorithm>
+using namespace std;
+//deque构造函数
+void print(const deque<int>&v) {
+	for (deque<int>::const_iterator it = v.begin(); it != v.end(); it++) {//只读迭代器
+		cout << *it<<" ";
+		//*it = 100;
+	}
+	cout << endl;
+}
+void test01() {
+	deque<int>d1,d3(10,100);
+	for (int i = 0; i < 10; i++) {
+		d1.push_back(i);
+	}
+	print(d1);
+	deque<int>d2(d1.begin(), d1.end());
+	deque<int>d4(d3);
+}
+
+#include<iostream>
+#include<deque>
+#include<algorithm>
+using namespace std;
+//deque插入与删除
+void print(const deque<int>&v) {
+	for (deque<int>::const_iterator it = v.begin(); it != v.end(); it++) {//只读迭代器
+		cout << *it<<" ";
+	}
+	cout << endl;
+}
+void test01() {
+	deque<int>d1;
+	d1.push_back(10);
+	d1.push_back(20);
+	//头插法
+	d1.push_front(100);
+	d1.push_front(200);
+	print(d1);
+	//删除
+	d1.pop_back();
+	//头删
+	d1.pop_front();
+	print(d1);
+	d1.insert(d1.begin(), 1000);
+	d1.insert(d1.begin(),2, 1);
+	print(d1);
+	d1.insert(d1.begin(), d1.begin(), d1.end());//按区间插入
+	print(d1);
+	d1.erase(d1.begin());
+	d1.clear();//清空
+}
+int main() {
+	test01();
+	system("pause");
+	return 0;
+}
+//deque的存取与vector类似，不再赘述
+
+int main() {
+	test01();
+	system("pause");
+	return 0;
+}
+//deque容器赋值与vector相似，不再赘述
+//deque容器大小操作与vector相似，不再赘述
+//deque没有容量
+#include<iostream>
+#include<deque>
+#include<algorithm>//标准去算法头文件
+using namespace std;
+//deque的排序
+void print(const deque<int>&v) {
+	for (deque<int>::const_iterator it = v.begin(); it != v.end(); it++) {//只读迭代器
+		cout << *it<<" ";
+	}
+	cout << endl;
+}
+void test01() {
+	deque<int>d1;
+	d1.push_back(10);
+	d1.push_back(20);
+	d1.push_front(100);
+	d1.push_front(200);
+	sort(d1.begin(),d1.end());//排序算法(默认从下到大排序)
+	//对于支持随机访问的容器 都可用sort排序
+	print(d1);
+}
+int main() {
+	test01();
+	system("pause");
+	return 0;
+}

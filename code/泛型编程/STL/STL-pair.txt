@@ -1,0 +1,17 @@
+//pair
+#include<iostream>
+using namespace std;
+void test01() {
+	//pair的创建
+	//第一种方式
+	pair<string, int>p("tom", 20);
+	pair<string, int>p2 = make_pair("jerry", 18);
+	//访问
+	cout << "姓名:" << p.first << "年龄:" <<p.second<< endl;
+	cout << "姓名:" << p2.first << "年龄:" << p2.second << endl;
+}
+int main() {
+	test01();
+	system("pause");
+	return 0;
+}

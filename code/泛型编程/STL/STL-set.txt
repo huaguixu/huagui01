@@ -1,0 +1,164 @@
+#include<iostream>
+#include<set>
+#include<algorithm>//标准去算法头文件
+using namespace std;
+void print(const set<int>& v) {
+	for (set<int>::const_iterator it = v.begin(); it != v.end(); it++) {
+		cout << *it << endl;
+	}
+}
+void test01() {
+	//默认构造
+	set<int>s1,s3;
+	//拷贝构造
+	set<int>s2(s1);
+	//等号赋值
+	s3 = s1;
+	//插入数据
+	s1.insert(10);
+	s1.insert(30);
+	s1.insert(60);
+	s1.insert(20);
+	//自动排序 默认从大到小 set不能重复插入相同数据
+	print(s1);
+}
+int main() {
+	test01();
+	system("pause");
+	return 0;
+}
+//判断大小、是否为空，交换的方式与vector一样 .size();.empty();.swap();
+
+#include<iostream>
+#include<set>
+#include<algorithm>//标准去算法头文件
+using namespace std;
+void print(const set<int>& v) {
+	for (set<int>::const_iterator it = v.begin(); it != v.end(); it++) {
+		cout << *it << endl;
+	}
+}
+void test01() {
+	//插入数据
+	set<int>s1;
+	s1.insert(100);
+	s1.insert(30);
+	s1.insert(60);
+	s1.insert(20);
+	print(s1);
+	//删除
+	s1.erase(s1.begin());//删最小的（排序后的）
+	s1.erase(30);//删除指定数据
+	s1.erase(s1.begin(), s1.end());// 按区间删除
+	//清空
+	s1.clear();
+}
+int main() {
+	test01();
+	system("pause");
+	return 0;
+}
+
+#include<iostream>
+#include<set>
+#include<algorithm>//标准去算法头文件
+using namespace std;
+void print(const set<int>& v) {
+	for (set<int>::const_iterator it = v.begin(); it != v.end(); it++) {
+		cout << *it << endl;
+	}
+}
+void test01() {
+	//查找
+	set<int>s1;
+	s1.insert(100);
+	s1.insert(30);
+	s1.insert(60);
+	s1.insert(20);
+	set<int>::iterator it=s1.find(30);//找到返回该迭代器，没找到返回s1.end();
+	cout << *it << endl;
+	//统计
+	int num;
+	num = s1.count(30);//set只有1或0；
+	cout << num << endl;
+}
+int main() {
+	test01();
+	system("pause");
+	return 0;
+}
+
+#include<iostream>
+#include<set>
+#include<algorithm>//标准去算法头文件
+using namespace std;
+void print(const set<int>& v) {
+	for (set<int>::const_iterator it = v.begin(); it != v.end(); it++) {
+		cout << *it << endl;
+	}
+}
+void print(const multiset<int>& v) {
+	for (multiset<int>::const_iterator it = v.begin(); it != v.end(); it++) {
+		cout << *it << endl;
+	}
+}
+void test01() {
+	//set与multiset的区别
+	set<int>s1;
+	s1.insert(10);//有返回值 判断是否插入成功
+	pair<set<int>::iterator ,bool>ret= s1.insert(10);
+	if (ret.second == 0) {
+		cout << "插入失败" << endl;
+	}
+	else {
+		cout << "插入成功" << endl;
+	}
+	multiset<int>m2;
+	m2.insert(10);
+	multiset<int>::iterator it = m2.insert(10);
+	print(m2);
+}
+int main() {
+	test01();
+	system("pause");
+	return 0;
+}
+
+#include<iostream>
+#include<set>
+#include<algorithm>//标准去算法头文件
+using namespace std;
+class mycompare {
+	bool operator()(int a1, int a2) {
+		return a1 > a2;
+	}
+};
+void print(const set<int>& v) {
+	for (set<int>::const_iterator it = v.begin(); it != v.end(); it++) {
+		cout << *it << endl;
+	}
+}
+void prints(const set<int,mycompare>& v) {
+	for (set<int,mycompare>::const_iterator it = v.begin(); it != v.end(); it++) {
+		cout << *it << endl;
+	}
+}
+
+void test01() {
+	//set容器的排序 利用仿函数
+	set<int>s1;
+	s1.insert(10);
+	s1.insert(20);
+	s1.insert(30);
+	s1.insert(40);
+	s1.insert(50);
+	print(s1);//指定排序为从小到大
+	//改为从大到小
+	set<int,mycompare>s2;
+	prints(s2);
+}
+int main() {
+	test01();
+	system("pause");
+	return 0;
+}
