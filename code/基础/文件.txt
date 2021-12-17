@@ -118,3 +118,203 @@ int main() {
 	system("pause");
 	return 0;
 }
+
+//C语言
+#include<stdio.h>
+#include<stdlib.h>
+int main() {
+	FILE* fp;//创建文件指针
+	char arr[20] = "文件.txt";
+	fopen_s(&fp,"arr","r");
+	if (fp != NULL) {//前为文件名（可包括文件路径）
+		char c;//读取一个字符并返回 若读到文件尾或出错返回EOF
+		while ((c = fgetc(fp)) != EOF) {
+			putchar(c);
+		}
+		//每一个打开的文件都必须对应一个文件指针变量
+		//文件打开方式 r,w,a,r+,w+,a+(文本文件);rb,wb,ab,rb+,wb+,ab+(二进制文件);
+		//r:只读（文件不存在返回NULL）
+		//w:只写（文件存在会删除）
+		//a:追加（追加数据，文件不存在会提示出错）
+		fclose(fp);
+	}//关闭文件 打开几个文件就要关闭文件 不然会使缓冲区的数据丢失
+	//如果还要对文件进行操作 要再一次打开文件
+}
+
+//C语言
+#include<stdio.h>
+#include<stdlib.h>
+int main() {
+	FILE* fp;
+	char arr[20] = "w=hello.txt",c;
+	fopen_s(&fp,arr,"w");//写文件
+	if (fp != NULL) {
+		while ((c = getchar()) != '#') {//以#结束
+			fputc(c,fp);//向fp中写入一个个字符(c)
+		}
+		fclose(fp);
+	}
+	
+}
+
+//C语言
+#include<stdio.h>
+#include<stdlib.h>
+int main() {
+	FILE* fp,*a;
+	int e=0, f=10;
+	char arr[20] = "w=hello.txt", c[20];
+	fopen_s(&a, "a.txt", "w");
+	fopen_s(&fp,arr,"r");//写文件
+	if ((fp != NULL)&&(a!=NULL)) {
+		fgets(c,20,fp);//最多输出19个字符\0不输出，参数为数组，输出字符数+1，文件指针
+		fputs(c,a);
+		printf("%s", c, 20);
+		fclose(fp);
+		fclose(a);
+	}
+	
+}
+
+//C语言
+#include<stdio.h>
+#include<stdlib.h>
+int main() {
+	FILE* fp;
+	int flag = 1;
+	char str[80], filename[50], ch;
+	printf("请输入文件名");
+	scanf_s("%s", filename, 50);
+	fopen_s(&fp, filename, "w+");
+	if (fp != NULL) {
+		while (flag) {
+			printf("请输入小写字母：");
+			scanf_s("%s", str, 80);
+			fprintf(fp, "%s\n", str);//格式化写入 参数为：文件指针 格式符，储存首地址
+			getchar();
+			printf("是否继续？(y/n)\n");
+			ch = getchar();
+			if (ch == 'n') {
+				flag = 0;
+			}
+		}
+		rewind(fp);
+			while (fscanf_s(fp, "%s",&str,80) != EOF) {//格式化读入 参数为：文件指针 格式符，储存首地址
+				for (int i = 0; str[i] != '\0'; i++) {
+					if (str[i] >= 'a' && str[i] <= 'z') {
+						str[i] -= 32;
+					}
+				}
+				printf("%s\n", str);
+			}
+			fclose(fp);
+		}
+	}
+
+
+//C语言文件操作
+#include<stdio.h>
+#include<stdlib.h>
+struct employee {
+	char name[20];
+	int age;
+	float salary;
+}emp[20];
+void save(char filename[], int n) {
+	FILE* fp;
+	int i;
+	fopen_s(&fp, filename, "wb");
+	if (fp != NULL) {
+		for (i = 0; i < n; i++) {
+			//数据块写入，参数为:储存首地址，字节大小，几个数据，文件指针
+			if (fwrite(&emp[i], sizeof(employee), 1, fp)!=1) {
+				printf("写入出错");
+			}
+
+		}
+	}
+	fclose(fp);
+}
+void show(char filename[], int n) {
+	FILE* fp;
+	int i;
+	fopen_s(&fp, filename, "rb");
+	if (fp != NULL){
+		//数据块读入，参数为:储存首地址，字节大小，几个数据，文件指针
+		fread(emp, sizeof(employee), n, fp);
+		for (i = 0; i < n; i++) {
+			printf("%s %d %f", emp[i].name, &emp[i].age,&emp[i].salary);
+		}
+	}
+	fclose(fp);
+}
+int main() {
+	int i, n;
+	char filename[50];
+	printf("请输入总人数：");
+	scanf_s("%d", &n);
+	printf("请输入文件名：");
+	scanf_s("%s", filename, 50);
+	printf("输入姓名 年龄 工资\n");
+	for (i = 0; i < n; i++) {
+		printf("%d", i + 1);
+		scanf_s("%s%d%f", emp[i].name, &emp[i].age, &emp[i].salary);
+	}
+	save(filename, n); show(filename, n);
+}
+
+//C语言文件操作
+#include<stdio.h>
+#include<stdlib.h>
+//文件定位(随机定位)
+//fseek(文件指针，位移量，起始点);
+//起始点 文件首部：SEEK_SET 0;当前位置：SEEK_CUR 1; 文件尾部：SEEK_END 2;
+//位移量可用sizeof
+//ftell(文件指针);获取文件内部指针当前位置 返回值为长整型；出错返回-1L；
+//rewind(文件指针);将文件指针重设会文件首部
+int main() {
+	FILE* fp;
+	char filename[50],ch;
+	long length;
+	printf("请输入文件名");
+	scanf_s("%s", &filename);
+	fopen_s(&fp, filename, "rb");
+	if (fp != NULL) {
+		fseek(fp, 0L, 2);
+		length = ftell(fp);
+		printf("文件长度为：%ld\n", length);
+		rewind(fp);
+		while (!feof(fp)) {
+			ch = fgetc(fp);
+			puchar(ch);
+		}
+		fclose(fp);
+	}
+	}
+}
+
+//C语言文件操作
+#include<stdio.h>
+#include<stdlib.h>
+//文件出错检测
+//feof(fp);判断文件是否结束 结束时返回 true
+//ferror(fp);判断文件是否出现读写错误 没有错误时返回0；
+//flag=ferror(fp);常用方式
+//clearere(fp);清除文件错误标志 调用clearerr后ferror返回值为0;
+int main() {
+	FILE* fp;
+	char ch;
+	fopen_s(&fp, "st.dat", "rb");
+	if (fp != NULL) {
+		while (!feof(fp)) {
+			ch = fgetc(fp);
+			if (ferror(fp)) {
+				printf("文件读写出错");
+				clearerr(fp);
+				return 0;
+			}
+			else putchar(ch);
+		}
+		fclose(fp);
+	}
+}
