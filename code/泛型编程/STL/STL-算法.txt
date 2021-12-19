@@ -1,0 +1,701 @@
+//算法
+#include<iostream>
+#include<vector>
+#include<algorithm>
+//遍历算法 for_each
+using namespace std;
+void print01(int a) {
+	cout << a << " ";
+}
+class print02 {
+public:
+	void operator()(int a) {
+		cout << a << " ";
+	}
+};
+void print(vector<int>& v) {
+	for (vector<int>::iterator it = v.begin(); it != v.end(); it++) {
+		cout << *it <<" ";
+	}
+	cout << endl;
+}
+void test01() {
+	vector<int>v1, v2;
+	for (int i = 0; i < 10; i++) {
+		v1.push_back(i);
+	}
+	for_each(v1.begin(), v1.end(), print01);
+	cout << endl;
+	for_each(v1.begin(), v1.end(),print02());
+}
+int main() {
+	test01();
+	system("pause");
+	return 0;
+}
+
+//算法
+#include<iostream>
+#include<vector>
+#include<algorithm>
+//遍历算法 transform
+using namespace std;
+void print01(int a) {
+	cout << a << " ";
+}
+class add {
+public:
+	int operator()(int a) {
+		return a + 1;
+	}
+};
+void print(vector<int>& v) {
+	for (vector<int>::iterator it = v.begin(); it != v.end(); it++) {
+		cout << *it <<" ";
+	}
+	cout << endl;
+}
+void test01() {
+	vector<int>v1, v2;
+	for (int i = 0; i < 10; i++) {
+		v1.push_back(i);
+	}
+
+	v2.resize(v1.size());//为目标容器开辟空间
+	transform(v1.begin(), v1.end(), v2.begin(), add());//在搬运过程中可以通过仿函数进行运算
+	print(v1);
+	print(v2);
+}
+int main() {
+	test01();
+	system("pause");
+	return 0;
+}
+
+//算法
+#include<iostream>
+#include<vector>
+#include<algorithm>
+//查找算法 find
+using namespace std;
+class person {
+public:
+	person(string name, int age) {
+		m_name = name;
+		m_age = age;
+	}
+	string m_name;
+	int m_age;
+	bool operator==(const person& p) {
+		if (this->m_name == p.m_name && this->m_age == p.m_age) {
+			return true;
+		}
+		else return false;
+	}
+
+};
+void test01() {
+	vector<person>v1, v2;
+	person p1("a", 1);
+	person p2("b", 2);
+	person p3("c", 3);
+	person p4("d", 4);
+	v1.push_back(p1);
+	v1.push_back(p2);
+	v1.push_back(p3);
+	v1.push_back(p4);
+	person p5("c", 3);
+	vector<person>::iterator it=find(v1.begin(), v1.end(), p5);//需重载==
+	if (it != v1.end()) {
+		cout << it->m_name << endl;
+		cout << it->m_age << endl;
+	}
+}
+int main() {
+	test01();
+	system("pause");
+	return 0;
+}
+
+//算法
+#include<iostream>
+#include<vector>
+#include<algorithm>
+//查找算法 find_if
+using namespace std;
+class person {
+public:
+	person(string name, int age) {
+		m_name = name;
+		m_age = age;
+	}
+	string m_name;
+	int m_age;
+};
+class greaterF {
+public:
+	bool operator()(int v1) {
+		return v1 > 5;
+	}
+};
+class greater2 {
+public:
+	bool operator()(person& p) {
+		return p.m_age > 2;
+	}
+};
+void test01() {
+	//自定义数据类型
+	vector<person>v1, v2;
+	person p1("a", 1);
+	person p2("b", 2);
+	person p3("c", 3);
+	person p4("d", 4);
+	v1.push_back(p1);
+	v1.push_back(p2);
+	v1.push_back(p3);
+	v1.push_back(p4);
+	person p5("c", 3);
+	vector<person>::iterator it=find_if(v1.begin(), v1.end(),greater2());//find_if算法用谓词判断
+	if (it != v1.end()) {
+		cout << it->m_name <<" ";
+		cout << it->m_age << endl;
+	}
+}
+void test02() {
+	//内置数据类型
+	vector<int>v1;
+	for (int i = 0; i < 10; i++) {
+		v1.push_back(i);
+	}
+	vector<int>::iterator it=find_if(v1.begin(), v1.end(),greaterF());
+	cout << *it << endl;
+}
+int main() {
+	test01();
+	test02();
+	system("pause");
+	return 0;
+}
+
+//算法
+#include<iostream>
+#include<vector>
+#include<algorithm>
+//查找算法 adjscent_find 查找相邻重复元素
+using namespace std;
+
+void test01() {
+	//内置数据类型
+	vector<int>v1;
+	for (int i = 0; i < 10; i++) {
+		v1.push_back(i);
+		v1.push_back(2);
+	}
+	v1.push_back(2);
+	vector<int>::iterator it=adjacent_find(v1.begin(), v1.end());
+	if (it != v1.end()) {
+		cout << *it << endl;
+	}
+}
+int main() {
+	test01();
+	system("pause");
+	return 0;
+}
+
+//算法
+#include<iostream>
+#include<vector>
+#include<algorithm>
+//查找算法 binary_search 二分法查找
+using namespace std;
+void test01() {
+	vector<int>v1;
+	for (int i = 0; i < 10; i++) {
+		v1.push_back(i);
+	}
+	bool set=binary_search(v1.begin(), v1.end(),9);//必须是有升序序列 无序不准确
+	cout << set << endl;
+}
+
+//算法
+#include<iostream>
+#include<vector>
+#include<algorithm>
+//查找算法 count 统计相同数据个数
+using namespace std;
+class person {
+public:
+	person(string name, int age) {
+		m_name = name;
+		m_age = age;
+	}
+	string m_name;
+	int m_age;
+	bool operator==(const person&p) {
+		if (this->m_age == p.m_age)
+			return true;
+		else return false;
+	}
+};
+void test01() {
+	vector<int>v1;
+	for (int i = 0; i < 10; i++) {
+		v1.push_back(i);
+		v1.push_back(2);
+	}
+	int set=count(v1.begin(), v1.end(),2);
+	cout << set << endl;
+}
+void test02() {
+	vector<person>v1;
+	person p1("刘备", 25);
+	person p2("关羽", 25);
+	person p3("张飞", 25);
+	person p4("曹操", 29);
+	person p5("诸葛亮", 25);
+	v1.push_back(p1);
+	v1.push_back(p2);
+	v1.push_back(p3);
+	v1.push_back(p4);
+	int num = count(v1.begin(), v1.end(), p5);//重载==要加const
+	cout << num << endl;
+}
+int main() {
+	test02();
+	system("pause");
+	return 0;
+}
+
+//算法
+#include<iostream>
+#include<vector>
+#include<algorithm>
+//查找算法 count_if 按谓词判断统计个数
+using namespace std;
+class greater2 {
+public:
+	bool operator()(int v) {
+		return v > 2;
+	}
+};
+void test01() {
+	vector<int>v1;
+	for (int i = 0; i < 10; i++) {
+		v1.push_back(i);
+		v1.push_back(2);
+	}
+	int set=count_if(v1.begin(), v1.end(),greater2());
+	cout << set << endl;
+}
+int main() {
+	test01();
+	system("pause");
+	return 0;
+}
+
+//算法
+#include<iostream>
+#include<vector>
+#include<algorithm>
+//排序算法 sort 
+using namespace std;
+void print(vector<int>& v) {
+	for (vector<int>::iterator it = v.begin(); it != v.end(); it++) {
+		cout << *it << " ";
+	}
+	cout << endl;
+}
+void test01() {
+	vector<int>v1;
+	for (int i = 0; i < 10; i++) {
+		v1.push_back(i);
+		v1.push_back(2);
+	}
+	sort(v1.begin(), v1.end(),greater<int>());//用谓词改变排序规则
+	print(v1);
+}
+int main() {
+	test01();
+	system("pause");
+	return 0;
+}
+
+/算法
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<ctime>
+//排序算法 random_shuffle 打乱顺序
+using namespace std;
+void print(vector<int>& v) {
+	for (vector<int>::iterator it = v.begin(); it != v.end(); it++) {
+		cout << *it << " ";
+	}
+	cout << endl;
+}
+void test01() {
+	srand((unsigned int)time(NULL));
+	vector<int>v1;
+	for (int i = 0; i < 10; i++) {
+		v1.push_back(i);
+		v1.push_back(2);
+	}
+	sort(v1.begin(), v1.end(),greater<int>());//排好顺序
+	print(v1);
+	random_shuffle(v1.begin(), v1.end());//打乱顺序
+	print(v1);
+}
+int main() {
+	test01();
+	system("pause");
+	return 0;
+}
+
+//算法
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<ctime>
+//排序算法 merge 将有序序列合并成另一个有序序列
+using namespace std;
+void print(vector<int>& v) {
+	for (vector<int>::iterator it = v.begin(); it != v.end(); it++) {
+		cout << *it << " ";
+	}
+	cout << endl;
+}
+void test01() {
+	srand((unsigned int)time(NULL));
+	vector<int>v1,v2,v3;
+	for (int i = 0; i < 10; i++) {
+		v1.push_back(i);
+		v1.push_back(2);
+	}
+	sort(v1.begin(), v1.end(),greater<int>());//排好顺序
+	print(v1);
+	for (int i = 10; i < 20; i++) {
+		v2.push_back(i);
+		v2.push_back(19);
+	}
+	sort(v2.begin(), v2.end(), greater<int>());//排好顺序
+	print(v2);
+	v3.resize(v1.size()+v2.size());
+	merge(v1.begin(), v1.end(), v2.begin(), v2.end(), v3.begin(),greater<int>());//默认升序可以用谓词改变规则
+	//合并的容器和目标容器的排序规则应一样
+	print(v3);
+}
+int main() {
+	test01();
+	system("pause");
+	return 0;
+}
+
+//算法
+#include<iostream>
+#include<vector>
+#include<algorithm>
+//排序算法 reverse 序列反转
+using namespace std;
+void print(vector<int>& v) {
+	for (vector<int>::iterator it = v.begin(); it != v.end(); it++) {
+		cout << *it << " ";
+	}
+	cout << endl;
+}
+void test01() {
+	srand((unsigned int)time(NULL));
+	vector<int>v1;
+	for (int i = 0; i < 10; i++) {
+		v1.push_back(i);
+		v1.push_back(2);
+	}
+	print(v1);
+	reverse(v1.begin(), v1.end());
+	print(v1);
+}
+int main() {
+	test01();
+	system("pause");
+	return 0;
+}
+
+//算法
+#include<iostream>
+#include<vector>
+#include<algorithm>
+//拷贝算法 copy 拷贝
+using namespace std;
+void print(vector<int>& v) {
+	for (vector<int>::iterator it = v.begin(); it != v.end(); it++) {
+		cout << *it << " ";
+	}
+	cout << endl;
+}
+void test01() {
+	srand((unsigned int)time(NULL));
+	vector<int>v1,v2;
+	for (int i = 0; i < 10; i++) {
+		v1.push_back(i);
+		v1.push_back(2);
+	}
+	print(v1);
+	v2.resize(v1.size());
+	copy(v1.begin(), v1.end(),v2.begin());//copy可以改变想要拷贝的空间
+	print(v2);
+}
+int main() {
+	test01();
+	system("pause");
+	return 0;
+}
+//算法
+#include<iostream>
+#include<vector>
+#include<algorithm>
+//拷贝算法 replace 替换
+using namespace std;
+void print(vector<int>& v) {
+	for (vector<int>::iterator it = v.begin(); it != v.end(); it++) {
+		cout << *it << " ";
+	}
+	cout << endl;
+}
+void test01() {
+	srand((unsigned int)time(NULL));
+	vector<int>v1,v2;
+	for (int i = 0; i < 10; i++) {
+		v1.push_back(i);
+		v1.push_back(2);
+	}
+	print(v1);
+	replace(v1.begin(),v1.end(),2,20);//将区间内的所有的2换成20
+	print(v1);
+}
+int main() {
+	test01();
+	system("pause");
+	return 0;
+}
+
+//算法
+#include<iostream>
+#include<vector>
+#include<algorithm>
+//拷贝算法 replace_if 按谓词条件替换
+using namespace std;
+void print(vector<int>& v) {
+	for (vector<int>::iterator it = v.begin(); it != v.end(); it++) {
+		cout << *it << " ";
+	}
+	cout << endl;
+}
+class greater2 {
+public:
+	bool operator()(int v){
+		return v > 2;
+	}
+};
+void test01() {
+	srand((unsigned int)time(NULL));
+	vector<int>v1,v2;
+	for (int i = 0; i < 10; i++) {
+		v1.push_back(i);
+		v1.push_back(2);
+	}
+	print(v1);
+	replace_if(v1.begin(),v1.end(),greater2(),20);//将区间内的所有满足条件的数换成20
+	print(v1);
+}
+int main() {
+	test01();
+	system("pause");
+	return 0;
+}
+
+//算法
+#include<iostream>
+#include<vector>
+#include<algorithm>
+//拷贝算法 swap 同种容器交换
+using namespace std;
+void print(vector<int>& v) {
+	for (vector<int>::iterator it = v.begin(); it != v.end(); it++) {
+		cout << *it << " ";
+	}
+	cout << endl;
+}
+void test01() {
+	vector<int>v1,v2;
+	for (int i = 0; i < 10; i++) {
+		v1.push_back(i);
+		v1.push_back(2);
+	}
+	print(v1);
+	for (int i = 10; i < 30; i++) {
+		v2.push_back(i);
+		v2.push_back(13);
+	}
+	print(v2);
+	swap(v1,v2);//将容器交换 不同大小也可交换
+	print(v1);
+	print(v2);
+}
+int main() {
+	test01();
+	system("pause");
+	return 0;
+}
+
+//算法
+#include<iostream>
+#include<vector>
+#include<numeric>
+//算术生成算法 accumulate 
+using namespace std;
+void print(vector<int>& v) {
+	for (vector<int>::iterator it = v.begin(); it != v.end(); it++) {
+		cout << *it << " ";
+	}
+	cout << endl;
+}
+void test01() {
+	vector<int>v1,v2;
+	for (int i = 0; i <= 100; i++) {
+		v1.push_back(i);
+	}
+	int total=accumulate(v1.begin(), v1.end(), 1);//累加操作 第三个参数是起始累加值
+	//结果为容器累加后加第三个参数
+	cout << total << endl;
+}
+int main() {
+	test01();
+	system("pause");
+	return 0;
+}
+
+//算法
+#include<iostream>
+#include<vector>
+#include<numeric>
+//算术生成算法 fill 填充算法
+using namespace std;
+void print(vector<int>& v) {
+	for (vector<int>::iterator it = v.begin(); it != v.end(); it++) {
+		cout << *it << " ";
+	}
+	cout << endl;
+}
+void test01() {
+	vector<int>v1;
+	v1.resize(10);
+	//全部一样的值原有的数会磨出3
+	fill(v1.begin(), v1.end(), 100);
+	print(v1);
+}
+int main() {
+	test01();
+	system("pause");
+	return 0;
+}
+//算法
+#include<iostream>
+#include<vector>
+#include<numeric>
+#include<algorithm>
+///算法
+#include<iostream>
+#include<vector>
+#include<numeric>
+#include<algorithm>
+//集合算法 set_intersection 交集算法
+using namespace std;
+void print(vector<int>& v,vector<int>::iterator itend) {
+	for (vector<int>::iterator it = v.begin(); it != itend; it++) {
+		cout << *it << " ";
+	}
+	cout << endl;
+}
+void test01() {
+	vector<int>v1,v2,v3;
+	for (int i = 0; i < 10; i++) {
+		v1.push_back(i);
+		v2.push_back(i + 5);
+	}
+	v3.resize(min(v1.size(),v2.size()));
+	vector<int>::iterator itend=set_intersection(v1.begin(), v1.end(),
+		v2.begin(),v2.end(),v3.begin());//返回值为交集最后一个元素的迭代器 0之前的迭代器
+	print(v1,v1.end());
+	print(v3,itend);
+}
+int main() {
+	test01();
+	system("pause");
+	return 0;
+}
+
+//算法
+#include<iostream>
+#include<vector>
+#include<numeric>
+#include<algorithm>
+//集合算法 set_union 并集算法
+using namespace std;
+void print(vector<int>& v,vector<int>::iterator itend) {
+	for (vector<int>::iterator it = v.begin(); it != itend; it++) {
+		cout << *it << " ";
+	}
+	cout << endl;
+}
+void test01() {
+	vector<int>v1,v2,v3;
+	for (int i = 0; i < 10; i++) {
+		v1.push_back(i);
+		v2.push_back(i + 5);
+	}
+	v3.resize(v1.size()+v2.size());
+	vector<int>::iterator itend=set_union(v1.begin(), v1.end(),
+		v2.begin(),v2.end(),v3.begin());//返回值为并集最后一个元素的迭代器 0之前的迭代器
+	print(v1,v1.end());
+	print(v3,itend);
+}
+int main() {
+	test01();
+	system("pause");
+	return 0;
+}
+
+//算法
+#include<iostream>
+#include<vector>
+#include<numeric>
+#include<algorithm>
+//集合算法 set_difference 差集算法
+using namespace std;
+void print(vector<int>& v,vector<int>::iterator itend) {
+	for (vector<int>::iterator it = v.begin(); it != itend; it++) {
+		cout << *it << " ";
+	}
+	cout << endl;
+}
+void test01() {
+	vector<int>v1,v2,v3;
+	for (int i = 0; i < 10; i++) {
+		v1.push_back(i);
+		v2.push_back(i + 5);
+	}
+	v3.resize(max(v1.size(),v2.size()));
+	vector<int>::iterator itend=set_difference(v1.begin(), v1.end(),
+		v2.begin(),v2.end(),v3.begin());//返回值为并集最后一个元素的迭代器 0之前的迭代器
+	print(v1,v1.end());
+	print(v3,itend);//v3.begin()到itend之间是v1与v2的差集；
+	vector<int>::iterator iten = set_difference(v2.begin(), v2.end(),
+		v1.begin(), v1.end(), v3.begin());
+	print(v3, iten);//v3.begin()到iten之间是v2与v1的差集
+}
+int main() {
+	test01();
+	system("pause");
+	return 0;
+}
