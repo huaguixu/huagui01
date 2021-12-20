@@ -2,7 +2,7 @@
 #include<iostream>
 #include<vector>
 #include<algorithm>
-//遍历算法 for_each
+//遍历算法  for_each
 using namespace std;
 void print01(int a) {
 	cout << a << " ";
