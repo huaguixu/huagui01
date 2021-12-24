@@ -17,14 +17,11 @@ class rect{
 public:
 	int x, y, w, h;
 };
-class sound {
-
-};
 image im1;
 const int max = 100;//设置最大数目
 image* im2[max] = { NULL };//设置同种图片的数组
 int num=0;//统计数目
-bool collision(rect&r1,rect&r2) {//判断死否发生碰撞
+bool collision(rect&r1,rect&r2) {//判断是否发生碰撞
 	int c = 1;
 	if (r1.x<r2.x && r1.x + r1.w>r2.x) {
 		if (r1.y > r2.y && r2.y + r2.h)return c;
