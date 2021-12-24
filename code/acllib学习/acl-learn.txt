@@ -1,0 +1,152 @@
+#include"acllib.h"
+#include<stdio.h>
+#include<time.h>
+const char* winname = "test";
+int winx = 0, winy = 0, winwidth = 640, winheight = 640;
+ACL_Image img1, img2;
+const char* p1 = "tom.jpg", * p2 = "jerry.jpg";
+int moveid=0, movekey=20,createid=1,timerInterval=100;
+int score = 0;
+class image {
+public:
+	int mx,my;
+	int mwidth, mheight;
+	int mxdist,mydist;
+};
+class rect{
+public:
+	int x, y, w, h;
+};
+class sound {
+
+};
+image im1;
+const int max = 100;//设置最大数目
+image* im2[max] = { NULL };//设置同种图片的数组
+int num=0;//统计数目
+bool collision(rect&r1,rect&r2) {//判断死否发生碰撞
+	int c = 1;
+	if (r1.x<r2.x && r1.x + r1.w>r2.x) {
+		if (r1.y > r2.y && r2.y + r2.h)return c;
+		if (r1.y<r2.y && r1.y + r1.h>r2.y) return c;
+	}
+	else {
+		if (r1.x > r2.x && r2.x + r2.w > r1.x) {
+			if (r1.y > r2.y && r1.y < r2.y + r2.h) return c;
+			if (r1.y<r2.y && r1.y + r1.h>r2.y)return c;
+		}
+	}
+	c = 0;
+	return c;
+}
+void paint() {
+	beginPaint();
+	clearDevice();
+	putImageScale(&img1,im1.mx,im1.my,im1.mwidth,im1.mheight);
+	for (int i = 0; i <num-1; i++) {
+		if (im2[i]) {
+			putImageScale(&img2, im2[i]->mx, im2[i]->my, im2[i]->mwidth, im2[i]->mheight);
+		}
+	}
+	char str[50];
+	sprintf_s(str, 50, "score: %d", score);//将分数存在字符串里
+	setTextSize(30);//设置文字大小
+	paintText(10, 10, str);//输出分数
+	endPaint();
+}
+void timer(int id) {//自动精灵
+	int i = 0;
+		if (id == 0) {
+			for (i = 0; i < num; i++) {
+				if (im2[i] != NULL) {
+					im2[i]->mx += im2[i]->mxdist;//x方向位移
+					im2[i]->my += im2[i]->mydist;//y方向位移
+					if (im2[i]->mx + im2[i]->mxdist <= 0 || im2[i]->mx + im2[i]->mxdist >= winwidth - im2[i]->mwidth) {
+						im2[i]->mxdist *= -1;//撞墙转向
+					}
+					else if (im2[i]->my + im2[i]->mydist <= 0 || im2[i]->my + im2[i]->mydist >= winheight - im2[i]->mheight) {
+						im2[i]->mydist *= -1;//撞墙转向
+					}
+				}
+			}
+		}
+		if (id == 1) {//生成图片
+			if (num < max) 
+				num++;{
+				if (im2[num] == NULL) {
+					im2[num] = (image*)malloc(sizeof(image));
+					im2[num]->mwidth = 40;
+					im2[num]->mheight = 40;
+					im2[num]->mxdist = 3;
+					im2[num]->mydist = 3;
+					im2[num]->mx = rand() % (winwidth - im2[num]->mwidth);
+					im2[num]->my = rand() % (winheight - im2[num]->mheight);
+				}
+			}
+		}
+		paint();
+	
+}
+void keyboard(int key, int event) {//控制精灵
+	if (event != KEY_UP) {//KEY_DOWN按下 KEY_UP松开
+		switch (key) {
+		case VK_UP://VK_UP上键
+			if (im1.my >= 0) { im1.my -= im1.mydist; }
+			break;
+		case VK_DOWN://VK_DOWN下键
+			if (im1.my <= winheight-im1.mheight) { im1.my += im1.mydist; }
+			break;
+		case VK_LEFT://VK_LEFT左键
+			if (im1.mx >= 0) { im1.mx -= im1.mxdist; }
+			break;
+		case VK_RIGHT://VK_RIGHT右键
+			if (im1.mx <=winwidth- im1.mwidth) { im1.mx += im1.mxdist; }
+			break;
+		default:return;
+		}
+		rect r1,r2;
+		r1.x = im1.mx;
+		r1.y = im1.my;
+		r1.w = im1.mwidth;
+		r1.h = im1.mheight;
+		paint();
+		for (int i = 0; i < num-1; i++) {
+			if (im2[i]) {
+				r2.x = im2[i]->mx;
+				r2.y = im2[i]->my;
+				r2.w = im2[i]->mwidth;
+				r2.h = im2[i]->mheight;
+			}
+			if (collision(r1, r2)) {
+				free(im2[i]);
+				score++;
+			}
+		}
+	}
+}
+int Setup() {//主函数
+	initWindow(winname, winx, winy, winwidth, winheight);//生成窗口
+	beginPaint();
+	srand((unsigned int)time(NULL));//随机化时间种子
+	im1.mwidth = 80;
+	im1.mheight = 80;
+	im1.mxdist = 5;
+	im1.mydist = 5;
+	im1.mx = rand() % (winwidth - im1.mwidth);//设置参数
+	im1.my = rand() % (winwidth - im1.mwidth);
+	im2[num] = (image*)malloc(sizeof(image));
+	im2[num]->mwidth = 40;
+	im2[num]->mheight = 40;
+	im2[num]->mxdist = 3;
+	im2[num]->mydist = 3;
+	im2[num]->mx = rand() % (winwidth - im2[num]->mwidth);
+	im2[num]->my = rand() % (winheight - im2[num]->mheight);
+	loadImage(p1, &img1);
+	loadImage(p2, &img2);
+	registerTimerEvent(timer);//时间回调
+	startTimer(moveid,movekey);//计时器开始
+	startTimer(createid, timerInterval);
+	registerKeyboardEvent(keyboard);//键盘回调
+	endPaint();
+	return 0;
+}
