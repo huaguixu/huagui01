@@ -1,0 +1,160 @@
+#include"acllib.h"
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
+const char* winname = "test";
+int winx = 0, winy = 0, winwidth=640, winheight = 640;
+const char* i1name = "plane.jpg", * i2name = "tube.jpg",*i3name="sky.jpg";
+const char* s1name = "bgm.mp3", * s2name = "deadbgm.mp3";
+ACL_Image img1, img2,img3;
+ACL_Sound sound1, sound2;
+int id = 0, timeinterval=40;
+int jump = 0, ti = 1, move = 0;
+int sco = 0;
+int a, b, c;
+int beg=0;
+char g[20];
+class image {
+public:
+	int x, y;
+	int w, h;
+	int ixdist, iydist;
+};
+image im1, im2[500] = { NULL };
+int collision(image& r1,image& r2) {//判断是否发生碰撞
+	int c = 1;
+	if (r1.x<r2.x && r1.x + r1.w>r2.x) {
+		if (r1.y> r2.y && r2.y + r2.h>r1.y)return c;
+		if (r1.y<r2.y && r1.y + r1.h>r2.y) return c;
+	}
+	else {
+		if (r1.x > r2.x && r2.x + r2.w> r1.x) {
+			if (r1.y > r2.y && r1.y < r2.y + r2.h) return c;
+			if (r1.y<r2.y && r1.y + r1.h>r2.y)return c;
+		}
+	}
+	c = 0;
+	return c;
+}
+void map() {
+	playSound(sound1, 0);
+	im1.x = 0;
+	im1.y = 360;
+	im1.w = 40;
+	im1.h = 40;
+	im1.ixdist = 2;
+	im1.iydist = 5;
+	int i;
+	for (i = 0; i <250; i++) {
+		im2[i].w = 40;
+		im2[i].h = rand()%100+180;
+		im2[i].y =0;
+		im2[i].x = i*150+100;
+		im2[i].ixdist = 5;
+		im2[i].iydist = winheight - im2[i].h;
+		im2[i+250].w = 40;
+		im2[i+250].h = rand() % 100 + 180;
+		im2[i+250].y = winheight - im2[i+250].h;
+		im2[i+250].x = i * 150+100;
+		im2[i+250].ixdist = 5;
+		im2[i+250].iydist = 0;
+	}
+}
+void paint() {
+		beginPaint();
+		clearDevice();
+		putImageScale(&img3, winx, winy, winwidth, winheight);
+		putImageScale(&img1, im1.x, im1.y, im1.w, im1.h);
+		for (int i = 0; i < 500; i++) {
+			putImageScale(&img2, im2[i].x, im2[i].y, im2[i].w, im2[i].h);
+		}
+		endPaint();
+}
+void keyevent(int key, int event) {
+	if (event == KEY_DOWN) {
+		int c = 1;
+		switch (key) {
+		case VK_SPACE://VK_UP上键
+			jump = 1;
+			ti = 1;
+			beg = 1;
+			break;
+		default:
+			beg = 1;
+			break;
+		}
+	}
+	paint();
+}
+void gravity() {
+	if (jump == 1) {//跳跃
+		double u = (-15 * ti + ti * ti)/10;
+		ti++;
+		im1.y += u;
+		paint();
+	}
+}
+void ground() {
+		for (int i = 0; i <500; i++) {
+			im2[i].x -= im2[i].ixdist;
+		}
+}
+void score() {
+	a = !collision(im1, im2[sco]);
+	b = !collision(im1, im2[sco + 250]);
+	c = a * b;
+	if (c == 0 || im1.y > winheight||im1.y<0) {
+		beginPaint();
+		clearDevice();
+		setTextSize(50);
+		playSound(sound2, 0);
+		paintText(240, 240,  "you lose");
+		setTextSize(20);
+		paintText(240,300, "按空格键重新开始");
+		sprintf_s(g, "score: %d", sco);
+		setTextSize(30);
+		paintText(10, 10, g);
+		endPaint();
+		jump = 0, ti = 1, move = 0;
+		sco = 0;
+		beg = 0;
+		map();
+	}
+	else{
+		if (beg == 1) {
+			beginPaint();
+			sprintf_s(g, "score: %d", sco);
+			setTextSize(30);
+			paintText(10, 10, g);
+			endPaint();
+			if (im1.x > im2[sco].x+im2[sco].w) {
+				sco++;
+			}
+		}
+	}
+}
+void timer(int id) {
+	if (beg == 1) {
+		gravity();
+		ground();
+		score();
+	}
+}
+int Setup(){
+	initWindow(winname,winx,winy,winwidth,winheight);
+	beginPaint();
+	loadImage(i1name, &img1);
+	loadImage(i2name, &img2);
+	loadImage(i3name, &img3);
+	loadSound(s1name,&sound1);
+	loadSound(s2name, &sound2);
+	map();
+	registerTimerEvent(timer);
+	startTimer(id, timeinterval);
+	registerKeyboardEvent(keyevent);
+	putImageScale(&img3, winx, winy, winwidth, winheight);
+	setTextSize(40);
+	paintText(240, 300, "按空格键开始");
+	endPaint();
+	return 0;
+}
