@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网页标题</title>
+    <!-- 标题 -->
+</head>
+<body>
+    <!-- vscode注释快捷键 CTRL+/ -->
+    <!-- 网页的主题 -->
+    <!-- 标签的结构 -->
+    <!-- 开始标签<strong>文字加粗（内容）</strong>结束标签 -->
+    <!-- 两部分构成的为双标签，一个的称为单标签 -->
+    <!-- <br> (不需要开始结束，不需要包裹内容)-->
+    <!-- 标签之间的关系有 -->
+    <!-- 嵌套关系，<head><title>title在head里面
+    </title></head> -->
+    <!-- 并列关系<head></head> <body></body> -->
+</body>
+</html>
