@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>html-learn</title>
+</head>
+<body>
+   <!-- 表格标签 -->
+   <!-- table表示表格主体 -->
+   <!-- tr表示每行
+   td表示单元格 -->
+   <!-- 表格的相关属性 -->
+   <!-- border边框宽度
+   width表格宽度
+   height表格高度 -->
+   <!-- 样式效果推荐使用css -->
+   <!-- 表头可使用th标签
+   标题可使用caption -->
+   <table border="1" width="200" height="100">
+       <caption><strong>学生成绩单</strong></caption>
+       <tr>
+           <th>姓名</th>
+           <th>成绩</th>
+           <th>评语</th>
+       </tr>
+       <tr>
+        <td>ted</td>
+        <td>100</td>
+        <td>great</td>
+       </tr>
+   </table>
+</body>
+</html>
