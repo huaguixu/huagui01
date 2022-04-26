@@ -1,0 +1,38 @@
+package hello;
+interface B{//创建接口B,B为纯抽象类，无法new对象
+	void f();
+	void g();
+}
+interface E{//可以创建多个接口
+	void h();
+}
+interface F extends B,E{//接口可以多继承
+	void y();
+}
+abstract class C implements B,E,F{//C中有抽象方法，为抽象类，无法实例化对象
+	 //一个类可以实现多个接口
+	public void f(){
+		System.out.println("ff");
+	}
+	public void h(){
+		System.out.println("hh");
+	}
+	public void y(){
+		System.out.println("yy");
+	}
+}
+class D extends C{//D为C的子类//f g方法不是抽象方法，故D非抽象类，可以new对象
+	public void g(){
+		System.out.println("dd");
+	}
+}
+public class Hello {
+      public static void main(String[] arg){
+      D d=new D();
+       d.f();
+       B b;
+       b=new D(); b.f();b.g();//父类new子类，运行时多态，new谁调用谁
+       D c=new D();
+       c.h();c.y();
+      }
+}
